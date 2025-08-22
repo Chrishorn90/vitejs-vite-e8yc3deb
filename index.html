@@ -4,16 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RC Tracks App</title>
+
+  <!-- React + ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Supabase JS -->
+  <script src="https://unpkg.com/@supabase/supabase-js/dist/supabase.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
 
-  <!-- React and ReactDOM from CDN -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@supabase/supabase-js/dist/supabase.min.js"></script>
-
-  <!-- Your App -->
-  <script src="app.js"></script>
+  <!-- Your React App -->
+  <script type="text/babel" src="app.js"></script>
 </body>
 </html>
