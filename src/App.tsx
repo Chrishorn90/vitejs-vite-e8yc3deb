@@ -1,98 +1,38 @@
-import { useEffect, useState } from 'react'
-import { supabase } from './supabaseClient'
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  const [user, setUser] = useState(null)
-  const [tracks, setTracks] = useState([])
-  const [selectedTrack, setSelectedTrack] = useState(null)
-  const [races, setRaces] = useState([])
-
-  // Check for logged-in user
-  useEffect(() => {
-    const session = supabase.auth.getSession()
-    session.then(({ data }) => setUser(data.session?.user || null))
-    
-    // Listen for auth changes
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null)
-    })
-  }, [])
-
-  // Fetch tracks
-  useEffect(() => {
-    const fetchTracks = async () => {
-      const { data, error } = await supabase
-        .from('tracks')
-        .select('*')
-        .order('name')
-      if (error) console.error(error)
-      else setTracks(data)
-    }
-    fetchTracks()
-  }, [])
-
-  // Fetch races when a track is selected
-  useEffect(() => {
-    if (!selectedTrack) return
-    const fetchRaces = async () => {
-      const { data, error } = await supabase
-        .from('races')
-        .select('*')
-        .eq('track_id', selectedTrack.id)
-        .order('race_date', { ascending: true })
-      if (error) console.error(error)
-      else setRaces(data)
-    }
-    fetchRaces()
-  }, [selectedTrack])
-
-  // Google login
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google'
-    })
-    if (error) console.error(error)
-  }
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) console.error(error)
-  }
+  const [count, setCount] = useState(0)
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>RC Tracks & Races</h1>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
 
-      {!user ? (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-      ) : (
-        <div>
-          <p>Logged in as {user.email} <button onClick={signOut}>Sign Out</button></p>
-          
-          <h2>Tracks</h2>
-          <ul>
-            {tracks.map(track => (
-              <li key={track.id}>
-                <button onClick={() => setSelectedTrack(track)}>
-                  {track.name} - {track.city}, {track.state}
-                </button>
-              </li>
-            ))}
-          </ul>
+      <h1>Vite + React</h1>
+      <div className="card">
+  <button onClick={() => setCount((count) => count + 1)}>
+    count is {count}
+  </button>
+  <button onClick={() => setCount(0)}>Reset</button>
+  <p>
+    Edit <code>src/App.tsx</code> and save to test HMR
+  </p>
+</div>
+    
 
-          {selectedTrack && (
-            <div>
-              <h3>Races at {selectedTrack.name}</h3>
-              <ul>
-                {races.map(race => (
-                  <li key={race.id}>{new Date(race.race_date).toLocaleDateString()}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
   )
 }
 
